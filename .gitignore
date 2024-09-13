@@ -26,3 +26,5 @@ instance/
 Thumbs.db
 
 gpt.api
+
+.idea
