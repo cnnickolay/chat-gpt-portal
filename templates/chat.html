@@ -154,7 +154,8 @@
 
     function scrollToLatestResponse() {
         const chatBox = document.getElementById('chat-box');
-        chatBox.scrollTop = chatBox.scrollHeight;
+        const lastResponse = chatBox.lastElementChild;
+        lastResponse.scrollIntoView({ behavior: "smooth", block: "end" });
     }
 
     $('#message').on('keydown', function(event) {
