@@ -111,7 +111,10 @@
             const roleLabel = msg.role === 'user' ? 'user' : 'assistant';
 
             const collapsibleSection = `
-                <div class="collapsible" id="${collapsibleId}"><strong>${roleLabel}</strong></div>
+                <div class="collapsible" id="${collapsibleId}">
+                    <strong>${roleLabel}</strong>
+                    <button class="delete-btn" data-index="${index}">X</button>
+                </div>
                 <div class="content" id="${contentId}">
                     <p>${escapedContent}</p>
                 </div>
@@ -122,6 +125,13 @@
             // Add event listener to toggle the content when clicking the button
             $(`#${collapsibleId}`).on('click', function() {
                 $(`#${contentId}`).toggle();
+            });
+
+            // Add event listener to delete the entry when clicking the delete button
+            $(`#${collapsibleId} .delete-btn`).on('click', function(event) {
+                const indexToDelete = $(this).data('index');
+                conversationHistory.splice(indexToDelete, 1);
+                updateChatBox();
             });
 
             // Automatically expand the last message
