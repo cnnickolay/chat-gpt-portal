@@ -114,6 +114,13 @@
             $(`#${collapsibleId}`).on('click', function() {
                 $(`#${contentId}`).toggle();
             });
+
+            // Automatically expand the last message
+            if (index === conversationHistory.length - 1) {
+                $(`#${contentId}`).show();
+            } else {
+                $(`#${contentId}`).hide();
+            }
         });
     }
 
