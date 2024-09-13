@@ -13,7 +13,7 @@ openai.Model.list()
 
 class GPTVersion(Enum):
     GPT_4_1106_PREVIEW = "gpt-4-1106-preview"
-    GPT_4 = "gpt-4o-mini"
+    GPT_4 = "gpt-4o"
     GPT_3_5_TURBO_16K = "gpt-3.5-turbo-16k"
     GPT_3_5_TURBO = "gpt-3.5-turbo-1106"
     OFF = "off"
