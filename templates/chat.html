@@ -78,15 +78,34 @@
 
     function updateChatBox() {
         $('#chat-box').empty();
-        conversationHistory.forEach(msg => {
+        conversationHistory.forEach((msg, index) => {
             const escapedContent = escapeHtml(msg.content);
-            $('#chat-box').append(`<p><strong>${msg.role}:</strong> ${escapedContent}</p>`);
+            const collapsibleId = `collapsible-${index}`;
+            const contentId = `content-${index}`;
+            const roleLabel = msg.role === 'User' ? 'User' : 'Assistant';
+
+            const collapsibleSection = `
+                <button class="collapsible" id="${collapsibleId}">${roleLabel}</button>
+                <div class="content" id="${contentId}">
+                    <p>${escapedContent}</p>
+                </div>
+            `;
+
+            $('#chat-box').append(collapsibleSection);
+
+            // Add event listener to toggle the content when clicking the button
+            $(`#${collapsibleId}`).on('click', function() {
+                $(`#${contentId}`).toggle();
+            });
         });
     }
 
     $('#chat-form').on('submit', function(event) {
         event.preventDefault();
         const userMessage = $('#message').val();
+
+        // Show the loading indicator
+        showLoadingIndicator();
 
         $.ajax({
             url: chatUrl,
@@ -115,38 +134,9 @@
         }
     });
 
-    // Add a function to show the loading indicator
-function showLoadingIndicator() {
-    $('#chat-box').append('<p><em>Loading...</em></p>');
-}
-
-// Modify the form submission event to show the loading indicator before sending the message
-$('#chat-form').on('submit', function(event) {
-    event.preventDefault();
-    const userMessage = $('#message').val();
-
-    // Show the loading indicator
-    showLoadingIndicator();
-
-    $.ajax({
-        url: chatUrl,
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            message: userMessage,
-            conversation_history: conversationHistory
-        }),
-        success: function(response) {
-            conversationHistory = response.conversation_history;
-            updateChatBox();
-            $('#message').val('');
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-            alert('An error occurred while sending the message.');
-        }
-    });
-});
+    function showLoadingIndicator() {
+        $('#chat-box').append('<p><em>Loading...</em></p>');
+    }
 </script>
 </body>
 </html>
