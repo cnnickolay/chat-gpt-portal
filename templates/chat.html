@@ -82,7 +82,7 @@
             const escapedContent = escapeHtml(msg.content);
             const collapsibleId = `collapsible-${index}`;
             const contentId = `content-${index}`;
-            const roleLabel = msg.role === 'User' ? 'User' : 'Assistant';
+            const roleLabel = msg.role === 'user' ? 'user' : 'assistant';
 
             const collapsibleSection = `
                 <button class="collapsible" id="${collapsibleId}">${roleLabel}</button>
