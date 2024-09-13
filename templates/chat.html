@@ -67,10 +67,20 @@
     let conversationHistory = [];
     const chatUrl = "{{ chat_url }}";  // Use the URL passed from Flask
 
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
     function updateChatBox() {
         $('#chat-box').empty();
         conversationHistory.forEach(msg => {
-            $('#chat-box').append(`<p><strong>${msg.role}:</strong> ${msg.content}</p>`);
+            const escapedContent = escapeHtml(msg.content);
+            $('#chat-box').append(`<p><strong>${msg.role}:</strong> ${escapedContent}</p>`);
         });
     }
 
