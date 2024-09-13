@@ -27,7 +27,6 @@
     $('#chat-form').on('submit', function(event) {
         event.preventDefault();
         const userMessage = $('#message').val();
-        conversationHistory.push({ role: 'user', content: userMessage });
 
         $.ajax({
             url: '/chat',
