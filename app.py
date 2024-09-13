@@ -7,8 +7,11 @@ app = Flask(__name__)
 def chat():
     if request.method == 'POST':
         data = request.get_json()
-        user_message = data['message']
-        conversation_history = data['conversation_history']
+        if not data:
+            return jsonify({"error": "Invalid input"}), 400
+
+        user_message = data.get('message')
+        conversation_history = data.get('conversation_history', [])
         conversation_history.append({"role": "user", "content": user_message})
 
         # Call the GPT function
