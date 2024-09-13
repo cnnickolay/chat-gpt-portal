@@ -21,7 +21,7 @@ def chat():
         # Call the GPT function
         gpt_response = chatgpt_single_request_with_tokens(
             message=[msg['content'] for msg in conversation_history],
-            gpt_version=GPTVersion.GPT_3_5_TURBO,  # Replace with the appropriate GPT version
+            gpt_version=GPTVersion.GPT_4,  # Replace with the appropriate GPT version
             temperature=0.1
         )
 
