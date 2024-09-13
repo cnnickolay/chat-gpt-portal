@@ -16,6 +16,7 @@
 
 <script>
     let conversationHistory = [];
+    const chatUrl = "{{ chat_url }}";  // Use the URL passed from Flask
 
     function updateChatBox() {
         $('#chat-box').empty();
@@ -29,7 +30,7 @@
         const userMessage = $('#message').val();
 
         $.ajax({
-            url: '/chat',
+            url: chatUrl,
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({

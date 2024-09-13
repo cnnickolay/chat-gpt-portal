@@ -1,9 +1,13 @@
+import os
 from flask import Flask, request, jsonify, render_template, redirect, url_for
 from gpt import chatgpt_single_request_with_tokens, GPTVersion
 
 app = Flask(__name__)
 
-@app.route('/chat', methods=['GET', 'POST'])
+# Read the URL from the environment variable
+CHAT_URL = os.getenv('CHAT_URL', '/chat')
+
+@app.route(CHAT_URL, methods=['GET', 'POST'])
 def chat():
     if request.method == 'POST':
         data = request.get_json()
@@ -26,12 +30,8 @@ def chat():
 
         return jsonify(conversation_history=conversation_history)
 
-    return render_template('chat.html')
+    return render_template('chat.html', chat_url=CHAT_URL)
 
-@app.route('/hello')
-def hello():
-    name = request.args.get('name', 'World')  # Default to 'World' if no name is provided
-    return render_template('hello.html', name=name)
 
 if __name__ == '__main__':
     app.run()
