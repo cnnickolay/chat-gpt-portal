@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
@@ -17,6 +17,10 @@ def echo():
         }
     return jsonify(response)
 
+@app.route('/hello')
+def hello():
+    name = request.args.get('name', 'World')  # Default to 'World' if no name is provided
+    return render_template('hello.html', name=name)
+
 if __name__ == '__main__':
     app.run()  # For local development; Gunicorn will be used in production
-
