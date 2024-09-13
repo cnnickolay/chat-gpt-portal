@@ -76,6 +76,15 @@
         .content p {
             margin: 0;
         }
+
+        .label-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .delete-btn {
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -112,8 +121,10 @@
 
             const collapsibleSection = `
                 <div class="collapsible" id="${collapsibleId}">
-                    <strong>${roleLabel}</strong>
-                    <button class="delete-btn" data-index="${index}" style="margin-left: 5px;">X</button>
+                    <div class="label-container">
+                        <strong>${roleLabel}</strong>
+                        <button class="delete-btn" data-index="${index}">X</button>
+                    </div>
                 </div>
                 <div class="content" id="${contentId}">
                     <p>${escapedContent}</p>
