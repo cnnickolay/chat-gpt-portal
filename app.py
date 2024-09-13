@@ -27,5 +27,12 @@ def chat():
 
     return render_template('chat.html', conversation_history=conversation_history)
 
+
+@app.route('/hello')
+def hello():
+    name = request.args.get('name', 'World')  # Default to 'World' if no name is provided
+    return render_template('hello.html', name=name)
+
+
 if __name__ == '__main__':
     app.run()
