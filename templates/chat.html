@@ -24,7 +24,7 @@
             border: 1px solid #ccc;
             padding: 10px;
             overflow-y: auto;
-            font-size: 1.2em; /* Larger font size for chat messages */
+            font-size: 1em; /* Smaller font size for chat messages */
             white-space: pre-wrap; /* Preserve whitespace and formatting */
         }
         #chat-form {
@@ -34,21 +34,38 @@
         }
         #message {
             width: 100%;
-            height: 150px; /* Increased height for better visibility */
-            font-size: 1.2em; /* Larger font size for input */
-            padding: 10px;
+            height: 100px; /* Reduced height for better visibility */
+            font-size: 1em; /* Smaller font size for input */
+            padding: 5px; /* Reduced padding for input */
             box-sizing: border-box;
         }
         button {
-            font-size: 1.2em; /* Larger font size for button */
-            padding: 10px 20px;
+            font-size: 1em; /* Smaller font size for button */
+            padding: 5px 10px; /* Reduced padding for button */
             box-sizing: border-box;
         }
         p {
-            margin: 10px 0;
+            margin: 5px 0; /* Reduced margin for paragraphs */
+            font-size: 0.8em; /* Smaller font size for paragraphs */
         }
         strong {
-            font-size: 1.2em; /* Larger font size for role labels */
+            font-size: 1em; /* Smaller font size for role labels */
+        }
+        .collapsible {
+            font-size: 0.8em; /* Smaller font size for role labels */
+            padding: 5px 10px; /* Reduced padding for role labels */
+            box-sizing: border-box;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            text-align: left;
+            outline: none;
+        }
+        .content {
+            display: none;
+            padding: 10px;
+            overflow: hidden;
+            background-color: #f9f9f9;
         }
     </style>
 </head>
@@ -85,7 +102,7 @@
             const roleLabel = msg.role === 'user' ? 'user' : 'assistant';
 
             const collapsibleSection = `
-                <button class="collapsible" id="${collapsibleId}">${roleLabel}</button>
+                <div class="collapsible" id="${collapsibleId}"><strong>${roleLabel}</strong></div>
                 <div class="content" id="${contentId}">
                     <p>${escapedContent}</p>
                 </div>
