@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with GPT</title>
+</head>
+<body>
+<h1>Chat with GPT</h1>
+<form method="POST" action="{{ url_for('chat') }}">
+    <textarea name="message" rows="4" cols="50" placeholder="Enter your message here..."></textarea><br>
+    <button type="submit">Send</button>
+</form>
+<h2>Conversation History</h2>
+<ul>
+    {% for message in conversation_history %}
+    <li><strong>{{ message.role }}:</strong> {{ message.content }}</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
