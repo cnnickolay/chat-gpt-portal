@@ -2,20 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with GPT</title>
+    <title>Chat</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<h1>Chat with GPT</h1>
-<form method="POST" action="{{ url_for('chat') }}">
-    <textarea name="message" rows="4" cols="50" placeholder="Enter your message here..."></textarea><br>
+<div id="chat-box">
+    <!-- Chat messages will be displayed here -->
+</div>
+<form id="chat-form">
+    <input type="text" id="message" name="message" required>
     <button type="submit">Send</button>
 </form>
-<h2>Conversation History</h2>
-<ul>
-    {% for message in conversation_history %}
-    <li><strong>{{ message.role }}:</strong> {{ message.content }}</li>
-    {% endfor %}
-</ul>
+
+<script>
+    let conversationHistory = [];
+
+    function updateChatBox() {
+        $('#chat-box').empty();
+        conversationHistory.forEach(msg => {
+            $('#chat-box').append(`<p><strong>${msg.role}:</strong> ${msg.content}</p>`);
+        });
+    }
+
+    $('#chat-form').on('submit', function(event) {
+        event.preventDefault();
+        const userMessage = $('#message').val();
+        conversationHistory.push({ role: 'user', content: userMessage });
+
+        $.ajax({
+            url: '/chat',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                message: userMessage,
+                conversation_history: conversationHistory
+            }),
+            success: function(response) {
+                conversationHistory = response.conversation_history;
+                updateChatBox();
+                $('#message').val('');
+            }
+        });
+    });
+</script>
 </body>
 </html>
