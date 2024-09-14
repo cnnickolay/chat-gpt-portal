@@ -308,8 +308,8 @@
         event.preventDefault();
         const userMessage = $('#message').val();
 
-        // Clear the textarea and resize it immediately
-        $('#message').val('').trigger('input');
+        // Clear the textarea, set its height to auto, and trigger the input event
+        $('#message').val('').css('height', 'auto').trigger('input');
 
         showLoadingIndicator();
 
