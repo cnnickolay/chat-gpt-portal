@@ -184,6 +184,7 @@
         <textarea id="message" name="message" required></textarea>
         <button type="submit">Send</button>
     </form>
+    <button id="clear-history">Clear Chat History</button>
 </div>
 
 <script>
@@ -200,6 +201,9 @@
 
         // Trigger the input event to adjust the height on page load
         textarea.dispatchEvent(new Event('input'));
+
+        // Load chat history from localStorage
+        loadChatHistory();
     });
 
     function escapeHtml(unsafe) {
@@ -243,6 +247,7 @@
                 const indexToDelete = $(this).data('index');
                 conversationHistory.splice(indexToDelete, 1);
                 updateChatBox();
+                saveChatHistory();
             });
 
             // Automatically expand the last message
@@ -274,6 +279,7 @@
                 updateChatBox();
                 scrollToLatestResponse();
                 $('#message').val('');
+                saveChatHistory();
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
@@ -298,6 +304,26 @@
     function showLoadingIndicator() {
         $('#chat-box').append('<p><em>Loading...</em></p>');
     }
+
+    function saveChatHistory() {
+        localStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
+    }
+
+    function loadChatHistory() {
+        const savedHistory = localStorage.getItem('conversationHistory');
+        if (savedHistory) {
+            conversationHistory = JSON.parse(savedHistory);
+            updateChatBox();
+        }
+    }
+
+    $('#clear-history').on('click', function() {
+        if (confirm('Are you sure you want to clear the chat history?')) {
+            conversationHistory = [];
+            updateChatBox();
+            localStorage.removeItem('conversationHistory');
+        }
+    });
 </script>
 </body>
 </html>
