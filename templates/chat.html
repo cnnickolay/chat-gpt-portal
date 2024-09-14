@@ -5,19 +5,21 @@
     <title>Chat</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* General Styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             height: 100vh;
             display: flex;
-            background-color: #f5f5f5;
+            background-color: #f0f2f5;
         }
 
+        /* Sidebar Styles */
         #sidebar {
             width: 250px;
-            background-color: #333;
-            color: #fff;
+            background-color: #2c3e50;
+            color: #ecf0f1;
             padding: 20px;
             box-sizing: border-box;
             overflow-y: auto;
@@ -25,6 +27,7 @@
 
         #sidebar h2 {
             margin-top: 0;
+            font-size: 1.5em;
         }
 
         #sidebar ul {
@@ -35,13 +38,15 @@
         #sidebar ul li {
             padding: 10px;
             cursor: pointer;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #34495e;
+            transition: background-color 0.3s;
         }
 
         #sidebar ul li:hover {
-            background-color: #444;
+            background-color: #34495e;
         }
 
+        /* Container Styles */
         #container {
             flex: 1;
             display: flex;
@@ -51,19 +56,22 @@
             box-sizing: border-box;
         }
 
+        /* Chat Box Styles */
         #chat-box {
             flex: 1;
             width: 100%;
             max-width: 800px;
-            border: 1px solid #ccc;
+            border: 1px solid #dcdcdc;
             border-radius: 8px;
-            padding: 10px;
-            background-color: #fff;
+            padding: 20px;
+            background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             font-size: 1em;
+            overflow-y: auto;
         }
 
+        /* Chat Form Styles */
         #chat-form {
             display: flex;
             flex-direction: column;
@@ -77,38 +85,40 @@
             font-size: 1em;
             padding: 10px;
             box-sizing: border-box;
-            border: 1px solid #ccc;
+            border: 1px solid #dcdcdc;
             border-radius: 8px;
             margin-bottom: 10px;
             resize: none;
             overflow: hidden;
         }
 
+        /* Button Styles */
         button {
             font-size: 1em;
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
-            background-color: #007bff;
+            background-color: #3498db;
             color: #fff;
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #2980b9;
         }
 
         button:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
         }
 
+        /* Collapsible Section Styles */
         .collapsible {
             font-size: 0.9em;
-            padding: 5px;
+            padding: 10px;
             cursor: pointer;
-            background-color: #f0f0f0;
+            background-color: #ecf0f1;
             border: none;
             text-align: left;
             outline: none;
@@ -118,12 +128,12 @@
         }
 
         .collapsible:hover {
-            background-color: #e0e0e0;
+            background-color: #bdc3c7;
         }
 
         .content {
             display: none;
-            padding: 5px;
+            padding: 10px;
             background-color: #f9f9f9;
             margin: 0;
             border-radius: 8px;
@@ -133,15 +143,17 @@
             white-space: pre-wrap;
         }
 
+        /* Label Container Styles */
         .label-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
+        /* Delete Button Styles */
         .delete-btn {
             margin-left: 10px;
-            background-color: #dc3545;
+            background-color: #e74c3c;
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -151,14 +163,15 @@
         }
 
         .delete-btn:hover {
-            background-color: #c82333;
+            background-color: #c0392b;
         }
 
         .delete-btn:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.5);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.5);
         }
 
+        /* Responsive Styles */
         @media (max-width: 600px) {
             #container {
                 padding: 10px;
@@ -187,11 +200,11 @@
 
             .collapsible {
                 font-size: 0.8em;
-                padding: 4px;
+                padding: 8px;
             }
 
             .content {
-                padding: 4px;
+                padding: 8px;
             }
 
             .delete-btn {
