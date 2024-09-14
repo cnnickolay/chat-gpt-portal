@@ -308,6 +308,9 @@
         event.preventDefault();
         const userMessage = $('#message').val();
 
+        // Clear the textarea and resize it immediately
+        $('#message').val('').trigger('input');
+
         showLoadingIndicator();
 
         $.ajax({
@@ -322,7 +325,6 @@
                 chatHistories[currentChatIndex].history = response.conversation_history;
                 updateChatBox();
                 scrollToLatestResponse();
-                $('#message').val('');
                 saveChatHistories();
             },
             error: function(xhr, status, error) {
