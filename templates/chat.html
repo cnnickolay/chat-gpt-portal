@@ -207,6 +207,8 @@
     <ul id="history-list">
         <!-- Chat histories will be listed here -->
     </ul>
+    <input type="text" id="rename-input" placeholder="Rename chat" style="display: none;">
+    <button id="rename-chat" style="display: none;">Rename</button>
     <button id="new-chat">New Chat</button>
 </div>
 <div id="container">
@@ -237,6 +239,19 @@
 
         loadChatHistories();
         loadChatHistory(currentChatIndex);
+
+        $('#rename-input').on('input', function() {
+            $('#rename-chat').show();
+        });
+
+        $('#rename-chat').on('click', function() {
+            const newName = $('#rename-input').val().trim();
+            if (newName) {
+                chatHistories[currentChatIndex].name = newName;
+                saveChatHistories();
+                $('#rename-chat').hide();
+            }
+        });
     });
 
     function escapeHtml(unsafe) {
@@ -344,13 +359,15 @@
     function loadChatHistories() {
         $('#history-list').empty();
         chatHistories.forEach((chat, index) => {
-            const listItem = `<li data-index="${index}">Chat ${index + 1}</li>`;
+            const chatName = chat.name || `Chat ${index + 1}`;
+            const listItem = `<li data-index="${index}">${chatName}</li>`;
             $('#history-list').append(listItem);
         });
 
         $('#history-list li').on('click', function() {
             currentChatIndex = $(this).data('index');
             loadChatHistory(currentChatIndex);
+            $('#rename-input').val(chatHistories[currentChatIndex].name || `Chat ${currentChatIndex + 1}`);
         });
     }
 
