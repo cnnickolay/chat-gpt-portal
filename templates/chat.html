@@ -368,6 +368,8 @@
             currentChatIndex = $(this).data('index');
             loadChatHistory(currentChatIndex);
             $('#rename-input').val(chatHistories[currentChatIndex].name || `Chat ${currentChatIndex + 1}`);
+            $('#rename-input').show();
+            $('#rename-chat').show();
         });
     }
 
