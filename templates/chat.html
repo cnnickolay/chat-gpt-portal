@@ -11,8 +11,35 @@
             padding: 0;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             background-color: #f5f5f5;
+        }
+
+        #sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        #sidebar h2 {
+            margin-top: 0;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar ul li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #444;
+        }
+
+        #sidebar ul li:hover {
+            background-color: #444;
         }
 
         #container {
@@ -47,7 +74,7 @@
 
         #message {
             width: 100%;
-            min-height: 60px; /* Initial height */
+            min-height: 60px;
             font-size: 1em;
             padding: 10px;
             box-sizing: border-box;
@@ -55,7 +82,7 @@
             border-radius: 8px;
             margin-bottom: 10px;
             resize: none;
-            overflow: hidden; /* Hide scrollbar */
+            overflow: hidden;
         }
 
         button {
@@ -80,13 +107,13 @@
 
         .collapsible {
             font-size: 0.9em;
-            padding: 5px; /* Reduced padding */
+            padding: 5px;
             cursor: pointer;
             background-color: #f0f0f0;
             border: none;
             text-align: left;
             outline: none;
-            margin: 0; /* Removed margin */
+            margin: 0;
             border-radius: 8px;
             transition: background-color 0.3s;
         }
@@ -97,9 +124,9 @@
 
         .content {
             display: none;
-            padding: 5px; /* Reduced padding */
+            padding: 5px;
             background-color: #f9f9f9;
-            margin: 0; /* Removed margin */
+            margin: 0;
             border-radius: 8px;
         }
 
@@ -133,7 +160,6 @@
             box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.5);
         }
 
-        /* Media Queries for Mobile Devices */
         @media (max-width: 600px) {
             #container {
                 padding: 10px;
@@ -176,6 +202,13 @@
     </style>
 </head>
 <body>
+<div id="sidebar">
+    <h2>Chat Histories</h2>
+    <ul id="history-list">
+        <!-- Chat histories will be listed here -->
+    </ul>
+    <button id="new-chat">New Chat</button>
+</div>
 <div id="container">
     <div id="chat-box">
         <!-- Chat messages will be displayed here -->
@@ -188,8 +221,8 @@
 </div>
 
 <script>
-    let conversationHistory = [];
-    const chatUrl = "{{ chat_url }}";  // Use the URL passed from Flask
+    let chatHistories = JSON.parse(localStorage.getItem('chatHistories')) || [];
+    let currentChatIndex = localStorage.getItem('currentChatIndex') || 0;
 
     document.addEventListener('DOMContentLoaded', function() {
         const textarea = document.getElementById('message');
@@ -199,11 +232,10 @@
             this.style.height = (this.scrollHeight) + 'px';
         });
 
-        // Trigger the input event to adjust the height on page load
         textarea.dispatchEvent(new Event('input'));
 
-        // Load chat history from localStorage
-        loadChatHistory();
+        loadChatHistories();
+        loadChatHistory(currentChatIndex);
     });
 
     function escapeHtml(unsafe) {
@@ -217,6 +249,7 @@
 
     function updateChatBox() {
         $('#chat-box').empty();
+        const conversationHistory = chatHistories[currentChatIndex].history;
         conversationHistory.forEach((msg, index) => {
             const escapedContent = escapeHtml(msg.content);
             const collapsibleId = `collapsible-${index}`;
@@ -237,20 +270,17 @@
 
             $('#chat-box').append(collapsibleSection);
 
-            // Add event listener to toggle the content when clicking the button
             $(`#${collapsibleId}`).on('click', function() {
                 $(`#${contentId}`).toggle();
             });
 
-            // Add event listener to delete the entry when clicking the delete button
             $(`#${collapsibleId} .delete-btn`).on('click', function(event) {
                 const indexToDelete = $(this).data('index');
-                conversationHistory.splice(indexToDelete, 1);
+                chatHistories[currentChatIndex].history.splice(indexToDelete, 1);
                 updateChatBox();
-                saveChatHistory();
+                saveChatHistories();
             });
 
-            // Automatically expand the last message
             if (index === conversationHistory.length - 1) {
                 $(`#${contentId}`).show();
             } else {
@@ -263,7 +293,6 @@
         event.preventDefault();
         const userMessage = $('#message').val();
 
-        // Show the loading indicator
         showLoadingIndicator();
 
         $.ajax({
@@ -272,14 +301,14 @@
             contentType: 'application/json',
             data: JSON.stringify({
                 message: userMessage,
-                conversation_history: conversationHistory
+                conversation_history: chatHistories[currentChatIndex].history
             }),
             success: function(response) {
-                conversationHistory = response.conversation_history;
+                chatHistories[currentChatIndex].history = response.conversation_history;
                 updateChatBox();
                 scrollToLatestResponse();
                 $('#message').val('');
-                saveChatHistory();
+                saveChatHistories();
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
@@ -305,23 +334,46 @@
         $('#chat-box').append('<p><em>Loading...</em></p>');
     }
 
-    function saveChatHistory() {
-        localStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
+    function saveChatHistories() {
+        localStorage.setItem('chatHistories', JSON.stringify(chatHistories));
+        localStorage.setItem('currentChatIndex', currentChatIndex);
+        loadChatHistories();
     }
 
-    function loadChatHistory() {
-        const savedHistory = localStorage.getItem('conversationHistory');
-        if (savedHistory) {
-            conversationHistory = JSON.parse(savedHistory);
+    function loadChatHistories() {
+        $('#history-list').empty();
+        chatHistories.forEach((chat, index) => {
+            const listItem = `<li data-index="${index}">Chat ${index + 1}</li>`;
+            $('#history-list').append(listItem);
+        });
+
+        $('#history-list li').on('click', function() {
+            currentChatIndex = $(this).data('index');
+            loadChatHistory(currentChatIndex);
+        });
+    }
+
+    function loadChatHistory(index) {
+        if (chatHistories[index]) {
+            updateChatBox();
+        } else {
+            chatHistories[index] = { history: [] };
             updateChatBox();
         }
     }
 
+    $('#new-chat').on('click', function() {
+        chatHistories.push({ history: [] });
+        currentChatIndex = chatHistories.length - 1;
+        saveChatHistories();
+        loadChatHistory(currentChatIndex);
+    });
+
     $('#clear-history').on('click', function() {
         if (confirm('Are you sure you want to clear the chat history?')) {
-            conversationHistory = [];
+            chatHistories[currentChatIndex].history = [];
             updateChatBox();
-            localStorage.removeItem('conversationHistory');
+            saveChatHistories();
         }
     });
 </script>
