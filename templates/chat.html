@@ -223,6 +223,7 @@
 <script>
     let chatHistories = JSON.parse(localStorage.getItem('chatHistories')) || [];
     let currentChatIndex = localStorage.getItem('currentChatIndex') || 0;
+    const chatUrl = "{{ chat_url }}";  // Use the URL passed from Flask
 
     document.addEventListener('DOMContentLoaded', function() {
         const textarea = document.getElementById('message');
