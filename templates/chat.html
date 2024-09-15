@@ -35,6 +35,26 @@
             color: #2ecc71; /* Green for assistant */
         }
 
+        .delete-chat-btn {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+
+        .delete-chat-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .delete-chat-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.5);
+        }
+
         /* Sidebar Styles */
         #sidebar {
             width: 250px;
@@ -453,7 +473,11 @@
         $('#history-list').empty();
         chatHistories.forEach((chat, index) => {
             const chatName = chat.name || `Chat ${index + 1}`;
-            const listItem = `<li data-index="${index}">${chatName}</li>`;
+            const listItem = `
+                <li data-index="${index}">
+                    ${chatName}
+                    <button class="delete-chat-btn" data-index="${index}">X</button>
+                </li>`;
             $('#history-list').append(listItem);
         });
 
@@ -463,6 +487,18 @@
             $('#rename-input').val(chatHistories[currentChatIndex].name || `Chat ${currentChatIndex + 1}`);
             $('#rename-input').show();
             $('#rename-chat').show();
+        });
+
+        $('#history-list li .delete-chat-btn').on('click', function(event) {
+            event.stopPropagation();  // Prevent the click event from propagating to the list item
+            const indexToDelete = $(this).data('index');
+            chatHistories.splice(indexToDelete, 1);
+            if (currentChatIndex >= indexToDelete && currentChatIndex > 0) {
+                currentChatIndex--;
+            }
+            saveChatHistories();
+            loadChatHistories();
+            loadChatHistory(currentChatIndex);
         });
     }
 
