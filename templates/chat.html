@@ -336,7 +336,13 @@
             if (msg.role !== 'assistant') {
                 $(`#${collapsibleId} .delete-btn`).on('click', function(event) {
                     const indexToDelete = $(this).data('index');
-                    chatHistories[currentChatIndex].history.splice(indexToDelete, 1);
+                    if (chatHistories[currentChatIndex].history[indexToDelete].role === 'user') {
+                        // Delete all messages after the user message
+                        chatHistories[currentChatIndex].history = chatHistories[currentChatIndex].history.slice(0, indexToDelete);
+                    } else {
+                        // Delete only the selected message
+                        chatHistories[currentChatIndex].history.splice(indexToDelete, 1);
+                    }
                     updateChatBox();
                     saveChatHistories();
                 });
