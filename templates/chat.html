@@ -371,14 +371,20 @@
         $('#chat-box').empty();
         const conversationHistory = chatHistories[currentChatIndex].history;
         conversationHistory.forEach((msg, index) => {
-            const escapedContent = escapeHtml(msg.content).replace(/```(\w+)\n([\s\S]*?)\n```/g, (match, lang, code) => {
+            const escapedContent = escapeHtml(msg.content);
+
+            // Split the content into code and non-code sections
+            const parts = escapedContent.split(/(```\w*\n[\s\S]*?\n```)/g);
+
+            // Wrap non-code sections in <p class="common-text">
+            const wrappedContent = parts.map(part => {
+                return part.startsWith('```') ? part : `<p class="common-text">${part}</p>`;
+            }).join('');
+
+            // Replace code sections with styled code blocks
+            const finalContent = wrappedContent.replace(/```(\w*)\n([\s\S]*?)\n```/g, (match, lang, code) => {
                 return `<div class="styled-code"><button class="copy-btn" onclick="copyToClipboard('${code.replace(/'/g, "\\'")}')">Copy</button><p>${code}</p></div>`;
             });
-
-            // Wrap non-code text in <p class="common-text">
-            const wrappedContent = escapedContent.split(/(<div class="styled-code">[\s\S]*?<\/div>)/g).map(part => {
-                return part.startsWith('<div class="styled-code">') ? part : `<p class="common-text">${part}</p>`;
-            }).join('');
 
             const collapsibleId = `collapsible-${index}`;
             const contentId = `content-${index}`;
@@ -404,7 +410,7 @@
                     </div>
                 </div>
                 <div class="content" id="${contentId}">
-                    ${wrappedContent}
+                    ${finalContent}
                 </div>
             `;
 
