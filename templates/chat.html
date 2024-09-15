@@ -14,6 +14,16 @@
             background-color: #f0f2f5;
         }
 
+        .styled-code {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
         .button-container {
             display: flex;
             gap: 5px;
@@ -339,7 +349,7 @@
         $('#chat-box').empty();
         const conversationHistory = chatHistories[currentChatIndex].history;
         conversationHistory.forEach((msg, index) => {
-            const escapedContent = escapeHtml(msg.content);
+            const escapedContent = escapeHtml(msg.content).replace(/```([\s\S]*?)```/g, '<p class="styled-code">$1</p>');
             const collapsibleId = `collapsible-${index}`;
             const contentId = `content-${index}`;
             const roleLabel = msg.role;
