@@ -257,6 +257,7 @@
     let chatHistories = JSON.parse(localStorage.getItem('chatHistories')) || [];
     let currentChatIndex = localStorage.getItem('currentChatIndex') || 0;
     const chatUrl = "{{ chat_url }}";  // Use the URL passed from Flask
+   let indexToDelete = null;
 
     document.addEventListener('DOMContentLoaded', function() {
         const textarea = document.getElementById('message');
@@ -350,16 +351,18 @@
 
             if (msg.role === 'user' || msg.role === 'system') {
                 $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
-                    const indexToEdit = $(this).data('index');
-                    const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
-                    $('#message').val(msgToEdit.content).trigger('input').focus();
-                    chatHistories[currentChatIndex].history = chatHistories[currentChatIndex].history.slice(0, indexToEdit);
-                    updateChatBox();
-                    saveChatHistories();
+                   $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
+                       const indexToEdit = $(this).data('index');
+                       const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
+                       $('#message').val(msgToEdit.content).trigger('input').focus();
+                       indexToDelete = indexToEdit;  // Store the index to be deleted
+                       updateChatBox();
+                       saveChatHistories();
 
-                    const textarea = document.getElementById('message');
-                    textarea.dispatchEvent(new Event('input'));
-                });
+                       const textarea = document.getElementById('message');
+                       textarea.dispatchEvent(new Event('input'));
+                   });
+               });
             }
 
             if (index === conversationHistory.length - 1) {
@@ -376,6 +379,11 @@
 
         // Clear the textarea, set its height to auto, and trigger the input event
         $('#message').val('').css('height', 'auto').trigger('input');
+
+        if (indexToDelete !== null) {
+            chatHistories[currentChatIndex].history = chatHistories[currentChatIndex].history.slice(0, indexToDelete);
+            indexToDelete = null;  // Reset the index after deletion
+        }
 
         showLoadingIndicator();
 
