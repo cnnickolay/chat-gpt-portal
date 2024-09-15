@@ -294,7 +294,7 @@
             .replace(/'/g, "&#039;");
     }
 
-function updateChatBox() {
+    function updateChatBox() {
         $('#chat-box').empty();
         const conversationHistory = chatHistories[currentChatIndex].history;
         conversationHistory.forEach((msg, index) => {
@@ -308,8 +308,11 @@ function updateChatBox() {
                     <div class="label-container">
                         <strong class="${roleLabel}">${roleLabel}</strong>
                         <div class="button-container">
-                            <button class="delete-btn" data-index="${index}">X</button>
             `;
+
+            if (msg.role !== 'assistant') {
+                collapsibleSection += `<button class="delete-btn" data-index="${index}">X</button>`;
+            }
 
             if (msg.role === 'user' || msg.role === 'system') {
                 collapsibleSection += `<button class="edit-btn" data-index="${index}">E</button>`;
@@ -330,12 +333,14 @@ function updateChatBox() {
                 $(`#${contentId}`).toggle();
             });
 
-            $(`#${collapsibleId} .delete-btn`).on('click', function(event) {
-                const indexToDelete = $(this).data('index');
-                chatHistories[currentChatIndex].history.splice(indexToDelete, 1);
-                updateChatBox();
-                saveChatHistories();
-            });
+            if (msg.role !== 'assistant') {
+                $(`#${collapsibleId} .delete-btn`).on('click', function(event) {
+                    const indexToDelete = $(this).data('index');
+                    chatHistories[currentChatIndex].history.splice(indexToDelete, 1);
+                    updateChatBox();
+                    saveChatHistories();
+                });
+            }
 
             if (msg.role === 'user' || msg.role === 'system') {
                 $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
