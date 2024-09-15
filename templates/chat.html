@@ -285,7 +285,7 @@
             const escapedContent = escapeHtml(msg.content);
             const collapsibleId = `collapsible-${index}`;
             const contentId = `content-${index}`;
-            const roleLabel = msg.role === 'user' ? 'user' : 'assistant';
+            const roleLabel = msg.role;
 
             let collapsibleSection = `
                 <div class="collapsible" id="${collapsibleId}">
@@ -295,8 +295,8 @@
                             <button class="delete-btn" data-index="${index}">X</button>
             `;
 
-            if (msg.role === 'user') {
-                collapsibleSection += `<button class="edit-btn" data-index="${index}">Edit</button>`;
+            if (msg.role === 'user' || msg.role === 'system') {
+                collapsibleSection += `<button class="edit-btn" data-index="${index}">E</button>`;
             }
 
             collapsibleSection += `
@@ -321,7 +321,7 @@
                 saveChatHistories();
             });
 
-            if (msg.role === 'user') {
+            if (msg.role === 'user' || msg.role === 'system') {
                 $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
                     const indexToEdit = $(this).data('index');
                     const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
