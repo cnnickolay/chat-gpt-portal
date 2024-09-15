@@ -349,7 +349,7 @@
         $('#chat-box').empty();
         const conversationHistory = chatHistories[currentChatIndex].history;
         conversationHistory.forEach((msg, index) => {
-            const escapedContent = escapeHtml(msg.content).replace(/```(\w+)([\s\S]*?)```/g, '<p class="styled-code">$2</p>');
+            const escapedContent = escapeHtml(msg.content).replace(/```(\w+)\n([\s\S]*?)\n```/g, '<p class="styled-code">$2</p>');
             const collapsibleId = `collapsible-${index}`;
             const contentId = `content-${index}`;
             const roleLabel = msg.role;
