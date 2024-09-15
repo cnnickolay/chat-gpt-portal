@@ -396,7 +396,13 @@
     }
 
     $('#new-chat').on('click', function() {
-        chatHistories.push({ history: [] });
+        const newChat = {
+            history: [
+                { role: 'system', content: 'keep answers concise, focus on most important aspects' },
+                { role: 'system', content: 'first sentence in your answer should be a summary of the topic that is being discussed, 4 words maximum' }
+            ]
+        };
+        chatHistories.push(newChat);
         currentChatIndex = chatHistories.length - 1;
         saveChatHistories();
         loadChatHistory(currentChatIndex);
