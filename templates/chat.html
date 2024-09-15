@@ -312,11 +312,10 @@
             $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
                 const indexToEdit = $(this).data('index');
                 const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
-                $('#message').val(msgToEdit.content).focus();
+                $('#message').val(msgToEdit.content).trigger('input').focus();
                 chatHistories[currentChatIndex].history = chatHistories[currentChatIndex].history.slice(0, indexToEdit);
                 updateChatBox();
                 saveChatHistories();
-                $('#message').val(msgToEdit.content).css('height', 'auto').trigger('input').focus();
             });
 
             if (index === conversationHistory.length - 1) {
