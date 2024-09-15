@@ -22,6 +22,24 @@
             font-family: monospace;
             white-space: pre-wrap;
             overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .copy-btn:hover {
+            background-color: #2980b9;
         }
 
         .button-container {
@@ -349,7 +367,9 @@
         $('#chat-box').empty();
         const conversationHistory = chatHistories[currentChatIndex].history;
         conversationHistory.forEach((msg, index) => {
-            const escapedContent = escapeHtml(msg.content).replace(/```(\w+)\n([\s\S]*?)\n```/g, '<p class="styled-code">$2</p>');
+            const escapedContent = escapeHtml(msg.content).replace(/```(\w+)\n([\s\S]*?)\n```/g, (match, lang, code) => {
+                return `<div class="styled-code"><button class="copy-btn" onclick="copyToClipboard('${code.replace(/'/g, "\\'")}')">Copy</button><p>${code}</p></div>`;
+            });
             const collapsibleId = `collapsible-${index}`;
             const contentId = `content-${index}`;
             const roleLabel = msg.role;
@@ -419,6 +439,16 @@
                 $(`#${contentId}`).hide();
             }
         });
+    }
+
+    function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert('Code copied to clipboard!');
     }
 
     $('#chat-form').on('submit', function(event) {
