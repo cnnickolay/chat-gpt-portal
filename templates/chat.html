@@ -19,6 +19,22 @@
             gap: 5px;
         }
 
+        .label-container strong {
+            color: #3498db; /* Default color */
+        }
+
+        .label-container strong.user {
+            color: #e74c3c; /* Red for user */
+        }
+
+        .label-container strong.system {
+            color: #f39c12; /* Orange for system */
+        }
+
+        .label-container strong.assistant {
+            color: #2ecc71; /* Green for assistant */
+        }
+
         /* Sidebar Styles */
         #sidebar {
             width: 250px;
@@ -278,7 +294,7 @@
             .replace(/'/g, "&#039;");
     }
 
-    function updateChatBox() {
+function updateChatBox() {
         $('#chat-box').empty();
         const conversationHistory = chatHistories[currentChatIndex].history;
         conversationHistory.forEach((msg, index) => {
@@ -290,7 +306,7 @@
             let collapsibleSection = `
                 <div class="collapsible" id="${collapsibleId}">
                     <div class="label-container">
-                        <strong>${roleLabel}</strong>
+                        <strong class="${roleLabel}">${roleLabel}</strong>
                         <div class="button-container">
                             <button class="delete-btn" data-index="${index}">X</button>
             `;
