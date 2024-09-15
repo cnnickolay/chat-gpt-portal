@@ -282,12 +282,18 @@
             const contentId = `content-${index}`;
             const roleLabel = msg.role === 'user' ? 'user' : 'assistant';
 
-            const collapsibleSection = `
+            let collapsibleSection = `
                 <div class="collapsible" id="${collapsibleId}">
                     <div class="label-container">
                         <strong>${roleLabel}</strong>
                         <button class="delete-btn" data-index="${index}">X</button>
-                        <button class="edit-btn" data-index="${index}">Edit</button>
+            `;
+
+            if (msg.role === 'user') {
+                collapsibleSection += `<button class="edit-btn" data-index="${index}">Edit</button>`;
+            }
+
+            collapsibleSection += `
                     </div>
                 </div>
                 <div class="content" id="${contentId}">
@@ -308,17 +314,19 @@
                 saveChatHistories();
             });
 
-            $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
-                const indexToEdit = $(this).data('index');
-                const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
-                $('#message').val(msgToEdit.content).trigger('input').focus();
-                chatHistories[currentChatIndex].history = chatHistories[currentChatIndex].history.slice(0, indexToEdit);
-                updateChatBox();
-                saveChatHistories();
+            if (msg.role === 'user') {
+                $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
+                    const indexToEdit = $(this).data('index');
+                    const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
+                    $('#message').val(msgToEdit.content).trigger('input').focus();
+                    chatHistories[currentChatIndex].history = chatHistories[currentChatIndex].history.slice(0, indexToEdit);
+                    updateChatBox();
+                    saveChatHistories();
 
-                const textarea = document.getElementById('message');
-                textarea.dispatchEvent(new Event('input'));
-            });
+                    const textarea = document.getElementById('message');
+                    textarea.dispatchEvent(new Event('input'));
+                });
+            }
 
             if (index === conversationHistory.length - 1) {
                 $(`#${contentId}`).show();
