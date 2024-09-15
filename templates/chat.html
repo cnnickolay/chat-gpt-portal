@@ -371,9 +371,10 @@
         $('#chat-box').empty();
         const conversationHistory = chatHistories[currentChatIndex].history;
         conversationHistory.forEach((msg, index) => {
-            const escapedContent = `<p class="common-text">${escapeHtml(msg.content)}</p>`.replace(/```(\w+)\n([\s\S]*?)\n```/g, (match, lang, code) => {
+            const escapedContent = escapeHtml(msg.content).replace(/```(\w+)\n([\s\S]*?)\n```/g, (match, lang, code) => {
                 return `<div class="styled-code"><button class="copy-btn" onclick="copyToClipboard('${code.replace(/'/g, "\\'")}')">Copy</button><p>${code}</p></div>`;
-            });
+            }).replace(/^(?!<div class="styled-code">)([\s\S]+)$/gm, '<p class="common-text">$1</p>'); // Wrap non-code text
+
             const collapsibleId = `collapsible-${index}`;
             const contentId = `content-${index}`;
             const roleLabel = msg.role;
