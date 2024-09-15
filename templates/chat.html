@@ -316,18 +316,7 @@
             }
 
             if (msg.role === 'user' || msg.role === 'system') {
-                $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
-                    event.stopPropagation();  // Add this line to stop event propagation
-                    const indexToEdit = $(this).data('index');
-                    const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
-                    $('#message').val(msgToEdit.content).trigger('input').focus();
-                    indexToDelete = indexToEdit;  // Store the index to be deleted
-                    updateChatBox();
-                    saveChatHistories();
-
-                    const textarea = document.getElementById('message');
-                    textarea.dispatchEvent(new Event('input'));
-                });
+                collapsibleSection += `<button class="edit-btn" data-index="${index}">E</button>`;
             }
 
             collapsibleSection += `
@@ -362,20 +351,18 @@
 
             if (msg.role === 'user' || msg.role === 'system') {
                 $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
-                   $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
-                       const indexToEdit = $(this).data('index');
-                       const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
-                       $('#message').val(msgToEdit.content).trigger('input').focus();
-                       indexToDelete = indexToEdit;  // Store the index to be deleted
-                       updateChatBox();
-                       saveChatHistories();
+                    event.stopPropagation();  // Add this line to stop event propagation
+                    const indexToEdit = $(this).data('index');
+                    const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
+                    $('#message').val(msgToEdit.content).trigger('input').focus();
+                    indexToDelete = indexToEdit;  // Store the index to be deleted
+                    updateChatBox();
+                    saveChatHistories();
 
-                       const textarea = document.getElementById('message');
-                       textarea.dispatchEvent(new Event('input'));
-                   });
-               });
+                    const textarea = document.getElementById('message');
+                    textarea.dispatchEvent(new Event('input'));
+                });
             }
-
             if (index === conversationHistory.length - 1) {
                 $(`#${contentId}`).show();
             } else {
