@@ -248,7 +248,10 @@
     </div>
     <form id="chat-form">
         <textarea id="message" name="message" required></textarea>
-        <button type="submit">Send</button>
+        <div class="button-container">
+            <button type="submit">Send</button>
+            <button type="button" id="cancel-edit">Cancel</button>
+        </div>
     </form>
     <button id="clear-history">Clear Chat History</button>
 </div>
@@ -284,7 +287,24 @@
                 $('#rename-chat').hide();
             }
         });
+
+        // Add event listener for the "Escape" key
+        $('#message').on('keydown', function(event) {
+            if (event.key === 'Escape') {
+                cancelEditing();
+            }
+        });
+
+        // Add event listener for the "Cancel" button
+        $('#cancel-edit').on('click', function() {
+            cancelEditing();
+        });
     });
+
+    function cancelEditing() {
+        $('#message').val('').css('height', 'auto').trigger('input');
+        indexToDelete = null;
+    }
 
     function escapeHtml(unsafe) {
         return unsafe
