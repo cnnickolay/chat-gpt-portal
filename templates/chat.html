@@ -288,6 +288,7 @@
                     <div class="label-container">
                         <strong>${roleLabel}</strong>
                         <button class="delete-btn" data-index="${index}">X</button>
+                        <button class="edit-btn" data-index="${index}">Edit</button>
                     </div>
                 </div>
                 <div class="content" id="${contentId}">
@@ -304,6 +305,15 @@
             $(`#${collapsibleId} .delete-btn`).on('click', function(event) {
                 const indexToDelete = $(this).data('index');
                 chatHistories[currentChatIndex].history.splice(indexToDelete, 1);
+                updateChatBox();
+                saveChatHistories();
+            });
+
+            $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
+                const indexToEdit = $(this).data('index');
+                const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
+                $('#message').val(msgToEdit.content).focus();
+                chatHistories[currentChatIndex].history = chatHistories[currentChatIndex].history.slice(0, indexToEdit);
                 updateChatBox();
                 saveChatHistories();
             });
