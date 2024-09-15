@@ -316,6 +316,9 @@
                 chatHistories[currentChatIndex].history = chatHistories[currentChatIndex].history.slice(0, indexToEdit);
                 updateChatBox();
                 saveChatHistories();
+
+                const textarea = document.getElementById('message');
+                textarea.dispatchEvent(new Event('input'));
             });
 
             if (index === conversationHistory.length - 1) {
