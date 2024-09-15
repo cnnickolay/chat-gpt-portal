@@ -316,7 +316,18 @@
             }
 
             if (msg.role === 'user' || msg.role === 'system') {
-                collapsibleSection += `<button class="edit-btn" data-index="${index}">E</button>`;
+                $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
+                    event.stopPropagation();  // Add this line to stop event propagation
+                    const indexToEdit = $(this).data('index');
+                    const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
+                    $('#message').val(msgToEdit.content).trigger('input').focus();
+                    indexToDelete = indexToEdit;  // Store the index to be deleted
+                    updateChatBox();
+                    saveChatHistories();
+
+                    const textarea = document.getElementById('message');
+                    textarea.dispatchEvent(new Event('input'));
+                });
             }
 
             collapsibleSection += `
