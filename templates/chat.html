@@ -14,6 +14,10 @@
             background-color: #f0f2f5;
         }
 
+        .common-text {
+            white-space: pre-wrap;
+        }
+
         .styled-code {
             background-color: #f5f5f5;
             border: 1px solid #ddd;
@@ -367,7 +371,7 @@
         $('#chat-box').empty();
         const conversationHistory = chatHistories[currentChatIndex].history;
         conversationHistory.forEach((msg, index) => {
-            const escapedContent = escapeHtml(msg.content).replace(/```(\w+)\n([\s\S]*?)\n```/g, (match, lang, code) => {
+            const escapedContent = `<p class="common-text">${escapeHtml(msg.content)}</p>`.replace(/```(\w+)\n([\s\S]*?)\n```/g, (match, lang, code) => {
                 return `<div class="styled-code"><button class="copy-btn" onclick="copyToClipboard('${code.replace(/'/g, "\\'")}')">Copy</button><p>${code}</p></div>`;
             });
             const collapsibleId = `collapsible-${index}`;
@@ -394,7 +398,7 @@
                     </div>
                 </div>
                 <div class="content" id="${contentId}">
-                    <p>${escapedContent}</p>
+                    ${escapedContent}
                 </div>
             `;
 
@@ -408,10 +412,8 @@
                 $(`#${collapsibleId} .delete-btn`).on('click', function(event) {
                     const indexToDelete = $(this).data('index');
                     if (chatHistories[currentChatIndex].history[indexToDelete].role === 'user') {
-                        // Delete all messages after the user message
                         chatHistories[currentChatIndex].history = chatHistories[currentChatIndex].history.slice(0, indexToDelete);
                     } else {
-                        // Delete only the selected message
                         chatHistories[currentChatIndex].history.splice(indexToDelete, 1);
                     }
                     updateChatBox();
@@ -421,11 +423,11 @@
 
             if (msg.role === 'user' || msg.role === 'system') {
                 $(`#${collapsibleId} .edit-btn`).on('click', function(event) {
-                    event.stopPropagation();  // Add this line to stop event propagation
+                    event.stopPropagation();
                     const indexToEdit = $(this).data('index');
                     const msgToEdit = chatHistories[currentChatIndex].history[indexToEdit];
                     $('#message').val(msgToEdit.content).trigger('input').focus();
-                    indexToDelete = indexToEdit;  // Store the index to be deleted
+                    indexToDelete = indexToEdit;
                     updateChatBox();
                     saveChatHistories();
 
