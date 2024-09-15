@@ -374,15 +374,15 @@
             const escapedContent = escapeHtml(msg.content);
 
             // Split the content into code and non-code sections
-            const parts = escapedContent.split(/(```\w*\n[\s\S]*?\n```)/g);
+            const parts = escapedContent.split(/(\s*```[\w]*\n[\s\S]*?\n\s*```)/g);
 
             // Wrap non-code sections in <p class="common-text">
             const wrappedContent = parts.map(part => {
-                return part.startsWith('```') ? part : `<p class="common-text">${part}</p>`;
+                return part.trim().startsWith('```') ? part : `<p class="common-text">${part}</p>`;
             }).join('');
 
             // Replace code sections with styled code blocks
-            const finalContent = wrappedContent.replace(/```(\w*)\n([\s\S]*?)\n```/g, (match, lang, code) => {
+            const finalContent = wrappedContent.replace(/\s*```(\w*)\n([\s\S]*?)\n\s*```/g, (match, lang, code) => {
                 return `<div class="styled-code"><button class="copy-btn" onclick="copyToClipboard('${code.replace(/'/g, "\\'")}')">Copy</button><p>${code}</p></div>`;
             });
 
