@@ -306,7 +306,6 @@
             <button type="button" id="cancel-edit">Cancel</button>
         </div>
     </form>
-    <button id="clear-history">Clear Chat History</button>
 </div>
 
 <script>
@@ -605,14 +604,6 @@
         currentChatIndex = chatHistories.length - 1;
         saveChatHistories();
         loadChatHistory(currentChatIndex);
-    });
-
-    $('#clear-history').on('click', function() {
-        if (confirm('Are you sure you want to clear the chat history?')) {
-            chatHistories[currentChatIndex].history = [];
-            updateChatBox();
-            saveChatHistories();
-        }
     });
 </script>
 </body>
