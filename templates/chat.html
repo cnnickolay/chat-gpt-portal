@@ -586,8 +586,9 @@
     function loadChatHistory(index) {
         if (chatHistories[index]) {
             updateChatBox();
+            $('#model-select').val(chatHistories[index].selectedModel || 'defaultModel'); // Update model select box
         } else {
-            chatHistories[index] = { history: [] };
+            chatHistories[index] = { history: [], selectedModel: 'defaultModel' }; // Initialize with default model
             updateChatBox();
         }
     }
