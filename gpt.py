@@ -19,6 +19,9 @@ class GPTVersion(Enum):
     OFF = "off"
 
 
+BACKWARDS_MAP = {v: k for k, v in GPTVersion.__members__.items()}
+
+
 def chatgpt_not_available():
     return jsonify({"error": "This ChatGPT functionality is not available for your account"}), 403
 

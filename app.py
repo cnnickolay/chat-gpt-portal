@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, jsonify, render_template, redirect, url_for
-from gpt import chatgpt_single_request_with_tokens, GPTVersion
+from gpt import chatgpt_single_request_with_tokens, GPTVersion, BACKWARDS_MAP
 
 app = Flask(__name__)
 
@@ -18,10 +18,14 @@ def chat():
         conversation_history = data.get('conversation_history', [])
         conversation_history.append({"role": "user", "content": user_message})
 
-        # Call the GPT function
+        # Use the backwards map to convert model name to enum
+        model_name = data.get('model', 'gpt-4o')  # Default to 'gpt-4o' if not provided
+        gpt_version = BACKWARDS_MAP.get(model_name, GPTVersion.GPT_4)
+
+        # Call the GPT function with the extracted model
         gpt_response = chatgpt_single_request_with_tokens(
             message=[msg['content'] for msg in conversation_history],
-            gpt_version=GPTVersion.GPT_4,  # Replace with the appropriate GPT version
+            gpt_version=gpt_version,
             temperature=0.1
         )
 
