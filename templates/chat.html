@@ -295,6 +295,7 @@
     <button id="new-chat">New Chat</button>
 </div>
 <div id="container">
+    <select id="model-select"></select>
     <div id="chat-box">
         <!-- Chat messages will be displayed here -->
     </div>
@@ -351,6 +352,30 @@
         $('#cancel-edit').on('click', function() {
             cancelEditing();
         });
+    });
+
+    function loadModels() {
+        $.get('/models', function(data) {
+            const modelSelect = $('#model-select');
+            modelSelect.empty();
+            data.models.forEach(model => {
+                modelSelect.append(new Option(model, model));
+            });
+            const savedModel = localStorage.getItem('selectedModel');
+            if (savedModel) {
+                modelSelect.val(savedModel);
+            }
+        });
+    }
+
+    // Save selected model to local storage
+    $('#model-select').on('change', function() {
+        localStorage.setItem('selectedModel', $(this).val());
+    });
+
+    // Call loadModels on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadModels();
     });
 
     function cancelEditing() {
@@ -485,7 +510,8 @@
             contentType: 'application/json',
             data: JSON.stringify({
                 message: userMessage,
-                conversation_history: chatHistories[currentChatIndex].history
+                conversation_history: chatHistories[currentChatIndex].history,
+                model: $('#model-select').val()
             }),
             success: function(response) {
                 chatHistories[currentChatIndex].history = response.conversation_history;
