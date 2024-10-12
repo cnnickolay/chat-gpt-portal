@@ -33,5 +33,11 @@ def chat():
     return render_template('chat.html', chat_url=CHAT_URL)
 
 
+@app.route('/models', methods=['GET'])
+def list_models():
+    models = [version.value for version in GPTVersion]
+    return jsonify(models=models)
+
+
 if __name__ == '__main__':
     app.run()
