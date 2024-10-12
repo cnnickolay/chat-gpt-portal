@@ -586,9 +586,8 @@
     function loadChatHistory(index) {
         if (chatHistories[index]) {
             updateChatBox();
-            $('#model-select').val(chatHistories[index].selectedModel || $('#model-select option:first').val());  // Load model for current chat
         } else {
-            chatHistories[index] = { history: [], selectedModel: $('#model-select option:first').val() };
+            chatHistories[index] = { history: [] };
             updateChatBox();
         }
     }
