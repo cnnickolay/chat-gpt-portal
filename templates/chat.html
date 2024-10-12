@@ -544,6 +544,7 @@
     }
 
     function saveChatHistories() {
+        chatHistories[currentChatIndex].selectedModel = $('#model-select').val();  // Save model for current chat
         localStorage.setItem('chatHistories', JSON.stringify(chatHistories));
         localStorage.setItem('currentChatIndex', currentChatIndex);
         loadChatHistories();
@@ -585,8 +586,9 @@
     function loadChatHistory(index) {
         if (chatHistories[index]) {
             updateChatBox();
+            $('#model-select').val(chatHistories[index].selectedModel || $('#model-select option:first').val());  // Load model for current chat
         } else {
-            chatHistories[index] = { history: [] };
+            chatHistories[index] = { history: [], selectedModel: $('#model-select option:first').val() };
             updateChatBox();
         }
     }
