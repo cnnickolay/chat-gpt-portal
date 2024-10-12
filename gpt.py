@@ -12,11 +12,11 @@ openai.Model.list()
 
 
 class GPTVersion(Enum):
-    GPT_4_1106_PREVIEW = "gpt-4-1106-preview"
     GPT_4 = "gpt-4o"
-    GPT_3_5_TURBO_16K = "gpt-3.5-turbo-16k"
-    GPT_3_5_TURBO = "gpt-3.5-turbo-1106"
-    OFF = "off"
+    GPT_4_mini = "gpt-4o-mini"
+    O1_PREVIEW = "o1-preview"
+    O1_MINI = "o1-mini"
+    # OFF = "off"
 
 
 BACKWARDS_MAP = {v.value: v for v in GPTVersion}
