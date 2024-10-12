@@ -20,11 +20,7 @@ def chat():
 
         # Use the backwards map to convert model name to enum
         model_name = data.get('model', 'gpt-4o')  # Default to 'gpt-4o' if not provided
-        print(model_name)
-
         gpt_version = BACKWARDS_MAP.get(model_name, GPTVersion.GPT_4)
-
-        print(gpt_version)
 
         # Call the GPT function with the extracted model
         gpt_response = chatgpt_single_request_with_tokens(
