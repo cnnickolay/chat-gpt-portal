@@ -597,7 +597,8 @@
             history: [
                 { role: 'system', content: 'if question starts with DELTA, provide only the changes, not the entire code' },
                 { role: 'system', content: 'keep answers concise, focus on most important aspects' },
-                { role: 'system', content: 'when it comes to coding, provide only the changes you made in my code' }
+                { role: 'system', content: 'when it comes to coding, provide only the changes you made in my code' },
+                { role: 'system', content: 'provide mathematical expressions in plain text format' },
             ]
         };
         chatHistories.push(newChat);
